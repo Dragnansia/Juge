@@ -3,6 +3,8 @@ pub enum Error {
     IoError(std::io::Error),
     SerenityError(serenity::Error),
     VarError(std::env::VarError),
+    NoFoundParameter(&'static str),
+    NoFoundCommand,
 }
 
 impl From<std::io::Error> for Error {
