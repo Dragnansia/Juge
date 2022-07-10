@@ -11,6 +11,8 @@ use serenity::{
 /// Mute user with duration in second
 pub struct Mute;
 
+const DEFAULT_DURATION: i64 = 300;
+
 #[async_trait]
 impl CommandFunc for Mute {
     async fn run(ctx: &Context, command: &ApplicationCommandInteraction) -> Result<(), Error> {
@@ -24,8 +26,8 @@ impl CommandFunc for Mute {
                 .clone()
                 .unwrap_or_default()
                 .as_i64()
-                .unwrap_or(60 * 5),
-            None => 60 * 5,
+                .unwrap_or(DEFAULT_DURATION),
+            None => DEFAULT_DURATION,
         };
 
         command
