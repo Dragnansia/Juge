@@ -9,7 +9,7 @@ use std::env;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let token = env::var("DISCORD_TOKEN")?;
+    let token = env::var("DISCORD_TOKEN").expect("No found token");
     let intents = GatewayIntents::DIRECT_MESSAGES
         | GatewayIntents::GUILD_MESSAGES
         | GatewayIntents::GUILD_MEMBERS
