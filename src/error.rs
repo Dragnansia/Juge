@@ -3,6 +3,7 @@ pub enum Error {
     IoError(std::io::Error),
     SerenityError(serenity::Error),
     VarError(std::env::VarError),
+    NoFoundUser,
     NoFoundParameter(&'static str),
     NoFoundCommand,
 }
