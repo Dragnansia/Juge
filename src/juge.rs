@@ -1,3 +1,8 @@
+use crate::{
+    commands::{mute::Mute, CommandFunc},
+    db::DataBase,
+    error,
+};
 use serenity::{
     async_trait,
     client::{Context, EventHandler},
@@ -14,13 +19,18 @@ use serenity::{
     Error,
 };
 
-use crate::{
-    commands::{mute::Mute, CommandFunc},
-    error,
-};
-
 /// Discord bot
-pub struct Juge;
+pub struct Juge {
+    pub db: DataBase,
+}
+
+impl Juge {
+    pub fn new() -> Self {
+        Self {
+            db: DataBase::new(),
+        }
+    }
+}
 
 #[async_trait]
 impl EventHandler for Juge {
@@ -38,7 +48,7 @@ impl EventHandler for Juge {
     async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
         if let Interaction::ApplicationCommand(command) = interaction {
             let res = match command.data.name.as_str() {
-                "mute" => Mute::run(&ctx, &command).await,
+                "mute" => Mute::run(self, &ctx, &command).await,
                 _ => Err(error::Error::NoFoundCommand),
             };
 

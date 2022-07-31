@@ -1,6 +1,8 @@
 mod commands;
+mod db;
 mod error;
 mod juge;
+mod setting;
 
 use error::Error;
 use juge::Juge;
@@ -15,7 +17,9 @@ async fn main() -> Result<(), Error> {
         | GatewayIntents::GUILD_MEMBERS
         | GatewayIntents::MESSAGE_CONTENT;
 
-    let mut client = Client::builder(&token, intents).event_handler(Juge).await?;
+    let mut client = Client::builder(&token, intents)
+        .event_handler(Juge::new())
+        .await?;
     client.start().await?;
 
     Ok(())
