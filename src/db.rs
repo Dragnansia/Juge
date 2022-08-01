@@ -1,5 +1,9 @@
+use std::env;
+
 use crate::setting::Setting;
 use mysql::{Pool, PooledConn};
+
+static mut DB: Box<DataBase> = Box::new(DataBase::new());
 
 pub struct DataBase {
     pool: Pool,
@@ -15,10 +19,16 @@ impl DataBase {
     }
 
     fn url() -> String {
-        String::new()
-    }
+        let user = env::var("DB_USER").unwrap();
+        let password = env::var("DB_PASS").unwrap();
+        let name = env::var("DB_NAME").unwrap();
+        let url = env::var("DB_URL").unwrap();
+        let port = env::var("DB_PORT").unwrap();
 
-    pub fn get_settings(&mut self) -> Option<Setting> {
-        None
+        format!("mysql://{}:{}@{}:{}/{}", user, password, url, port, name)
     }
+}
+
+pub fn settings(id: u64) -> Option<Setting> {
+    None
 }

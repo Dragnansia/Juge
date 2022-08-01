@@ -6,6 +6,8 @@ pub enum Error {
     NoFoundUser,
     NoFoundParameter(&'static str),
     NoFoundCommand,
+    NoFoundGuildID,
+    NoFoundGuild(u64),
 }
 
 impl From<std::io::Error> for Error {

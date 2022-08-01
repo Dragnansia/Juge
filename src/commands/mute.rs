@@ -1,5 +1,5 @@
 use super::CommandFunc;
-use crate::{error::Error, juge::Juge};
+use crate::{db::settings, error::Error};
 use serenity::{
     async_trait,
     client::Context,
@@ -19,11 +19,7 @@ const DEFAULT_DURATION: i64 = 300;
 
 #[async_trait]
 impl CommandFunc for Mute {
-    async fn run(
-        juge: &Juge,
-        ctx: &Context,
-        command: &ApplicationCommandInteraction,
-    ) -> Result<(), Error> {
+    async fn run(ctx: &Context, command: &ApplicationCommandInteraction) -> Result<(), Error> {
         let mut options = command.data.options.iter();
         let user = options
             .find(|e| e.name == "user")
@@ -39,7 +35,7 @@ impl CommandFunc for Mute {
         };
 
         // Check if clone member is good with data saved
-        if let Some(member) = command.member.clone() {
+        if let Some(mut member) = command.member.clone() {
             // Verif if user is not already mute and if time is add to the current mute duration
             // or reset to the new time if it's higher current remind time
 
@@ -51,10 +47,14 @@ impl CommandFunc for Mute {
                 _ => {}
             }
 
-            let role_id = juge
-                .db
-                .get_settings()
-                .ok_or(Error::NoFoundUser)?
+            let guild_id = command
+                .guild_id
+                .ok_or(Error::NoFoundGuildID)?
+                .as_u64()
+                .clone();
+
+            let role_id = settings(guild_id)
+                .ok_or(Error::NoFoundGuild(guild_id))?
                 .mute_role_id;
             member.add_role(&ctx.http, RoleId(role_id)).await?;
             println!("Member name: {}", member.display_name());

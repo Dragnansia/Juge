@@ -48,7 +48,7 @@ impl EventHandler for Juge {
     async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
         if let Interaction::ApplicationCommand(command) = interaction {
             let res = match command.data.name.as_str() {
-                "mute" => Mute::run(self, &ctx, &command).await,
+                "mute" => Mute::run(&ctx, &command).await,
                 _ => Err(error::Error::NoFoundCommand),
             };
 
