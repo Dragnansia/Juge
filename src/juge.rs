@@ -1,6 +1,5 @@
 use crate::{
     commands::{mute::Mute, CommandFunc},
-    db::DataBase,
     error,
 };
 use serenity::{
@@ -20,15 +19,11 @@ use serenity::{
 };
 
 /// Discord bot
-pub struct Juge {
-    pub db: DataBase,
-}
+pub struct Juge {}
 
 impl Juge {
     pub fn new() -> Self {
-        Self {
-            db: DataBase::new(),
-        }
+        Self {}
     }
 }
 
@@ -40,7 +35,7 @@ impl EventHandler for Juge {
         for g in ready.guilds {
             let res = Self::guild_command_initialisation(&g, &ctx).await;
             if let Err(err) = res {
-                println!("[Error - Ready] {}", err);
+                println!("[Error - Ready] {} for {} guild id", err, g.id);
             }
         }
     }

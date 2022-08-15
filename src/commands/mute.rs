@@ -53,7 +53,7 @@ impl CommandFunc for Mute {
                 .as_u64()
                 .clone();
 
-            let role_id = settings(guild_id)
+            let role_id = settings!(guild_id)
                 .ok_or(Error::NoFoundGuild(guild_id))?
                 .mute_role_id;
             member.add_role(&ctx.http, RoleId(role_id)).await?;

@@ -4,6 +4,7 @@ mod error;
 mod juge;
 mod setting;
 
+use db::DataBase;
 use error::Error;
 use juge::Juge;
 use serenity::{prelude::GatewayIntents, Client};
@@ -17,6 +18,7 @@ async fn main() -> Result<(), Error> {
         | GatewayIntents::GUILD_MEMBERS
         | GatewayIntents::MESSAGE_CONTENT;
 
+    DataBase::init();
     let mut client = Client::builder(&token, intents)
         .event_handler(Juge::new())
         .await?;
